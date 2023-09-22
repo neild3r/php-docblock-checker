@@ -8,7 +8,7 @@ use PhpParser\ParserFactory;
 /**
  * @requires PHP 7.0
  */
-class FileParserTest extends \PHPUnit_Framework_TestCase
+class FileParserTest extends \PHPUnit\Framework\TestCase
 {
     protected $filePath = __DIR__ . '/TestClassPhp7.php';
     protected $fileInfo;

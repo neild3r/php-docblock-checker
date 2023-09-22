@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ['7.3', '8', '8.2']
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: php-actions/composer@v6
+      with:
+        php_version: ${{ matrix.version }}
+    - name: Run PHP Unit tests
+      shell: bash
+      run: vendor/bin/phpunit --coverage-text

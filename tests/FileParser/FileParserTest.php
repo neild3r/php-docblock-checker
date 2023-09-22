@@ -5,12 +5,12 @@ namespace PhpDocBlockChecker\FileParser;
 use PhpDocBlockChecker\DocblockParser\DocblockParser;
 use PhpParser\ParserFactory;
 
-class FileParserTest extends \PHPUnit_Framework_TestCase
+class FileParserTest extends \PHPUnit\Framework\TestCase
 {
     protected $filePath = __DIR__ . '/TestClass.php';
     protected $fileInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileParser = new FileParser(
             (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
@@ -38,26 +38,31 @@ class FileParserTest extends \PHPUnit_Framework_TestCase
     public function testWithNoReturn()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::emptyMethod'];
-        $this->assertFalse($method['has_return']);
-        $this->assertEquals(null, $method['return']);
+        $this->assertFalse($method->hasReturn());
+        $this->assertEquals(null, $method->getReturnType());
     }
 
     public function testWithNoParams()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::emptyMethod'];
-        $this->assertEmpty($method['params']);
+        $this->assertEmpty($method->getParams());
     }
 
     public function testWithParams()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withParams'];
-        $this->assertEquals(['$foo' => null, '$bar' => null, '$baz' => null,], $method['params']);
+        $types = [];
+        foreach ($method->getParams() as $name => $type) {
+            $types[$name] = (string) $type;
+        }
+
+        $this->assertEquals(['$foo' => null, '$bar' => null, '$baz' => null,], $types);
     }
 
     public function testWithReturn()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withReturn'];
-        $this->assertTrue($method['has_return']);
-        $this->assertEquals(null, $method['return']);
+        $this->assertTrue($method->hasReturn());
+        $this->assertEquals(null, $method->getReturnType());
     }
 }

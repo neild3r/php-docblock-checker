@@ -3,7 +3,7 @@
 namespace PhpDocBlockChecker\FileProvider;
 
 
-class DirectoryFileProviderTest extends \PHPUnit_Framework_TestCase
+class DirectoryFileProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetFileIterator()

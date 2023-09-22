@@ -4,7 +4,7 @@ namespace PhpDocBlockChecker\FileProvider;
 
 use PhpDocBlockChecker\Config\Config;
 
-class FileProviderFactoryTest extends \PHPUnit_Framework_TestCase
+class FileProviderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetFileProvider()
     {
