@@ -1,6 +1,8 @@
 <?php
 
-namespace PhpDocBlockChecker\FileProvider;
+namespace PhpDocBlockChecker\Test\Unit\FileProvider;
+
+use PhpDocBlockChecker\FileProvider\StdinFileProvider;
 
 class StdinFileProviderTest extends \PHPUnit\Framework\TestCase
 {

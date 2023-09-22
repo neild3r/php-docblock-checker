@@ -1,6 +1,9 @@
 <?php
 
-namespace PhpDocBlockChecker\DocblockParser;
+namespace PhpDocBlockChecker\Test\Unit\DocblockParser;
+
+use PhpDocBlockChecker\DocblockParser\DocblockParser;
+use PhpDocBlockChecker\DocblockParser\TagCollection;
 
 class DocblockParserTest extends \PHPUnit\Framework\TestCase
 {

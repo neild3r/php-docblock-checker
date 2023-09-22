@@ -1,8 +1,10 @@
 <?php
 
-namespace PhpDocBlockChecker\FileProvider;
+namespace PhpDocBlockChecker\Test\Unit\FileProvider;
 
 use PhpDocBlockChecker\Config\Config;
+use PhpDocBlockChecker\FileProvider\FileProviderFactory;
+use PhpDocBlockChecker\FileProvider\FileProviderInterface;
 
 class FileProviderFactoryTest extends \PHPUnit\Framework\TestCase
 {

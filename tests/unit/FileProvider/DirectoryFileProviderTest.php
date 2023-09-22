@@ -1,7 +1,8 @@
 <?php
 
-namespace PhpDocBlockChecker\FileProvider;
+namespace PhpDocBlockChecker\Test\Unit\FileProvider;
 
+use PhpDocBlockChecker\FileProvider\DirectoryFileProvider;
 
 class DirectoryFileProviderTest extends \PHPUnit\Framework\TestCase
 {

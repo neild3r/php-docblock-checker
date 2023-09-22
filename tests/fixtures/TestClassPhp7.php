@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpDocBlockChecker\FileParser;
+namespace PhpDocBlockChecker\Test\Fixture;
 
-class TestClass
+class TestClassPhp7
 {
     /**
      * @return string

@@ -1,16 +1,19 @@
 <?php
 
-namespace PhpDocBlockChecker\FileParser;
+namespace PhpDocBlockChecker\Test\Unit\FileParser;
 
 use PhpDocBlockChecker\DocblockParser\DocblockParser;
+use PhpDocBlockChecker\FileParser\FileParser;
+use PhpDocBlockChecker\Test\Fixture\TestClassPhp7;
 use PhpParser\ParserFactory;
+use ReflectionClass;
 
 /**
  * @requires PHP 7.0
  */
 class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
 {
-    protected $filePath = __DIR__ . '/TestClassPhp7.php';
+    protected $filePath;
     protected $fileInfo;
 
     protected function setUp(): void
@@ -19,6 +22,8 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
             (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
             new DocblockParser()
         );
+
+        $this->filePath = (new ReflectionClass(TestClassPhp7::class))->getFileName();
 
         $this->fileInfo = $fileParser->parseFile($this->filePath);
     }
@@ -33,7 +38,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithReturnHint()
     {
-        $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withReturnHint'];
+        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string', $method->getReturnType()->toString());
         $this->assertEquals('string', $method->getDocBlock()->getReturnType()->toString());
@@ -44,7 +49,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithNullableReturnHint()
     {
-        $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withNullableReturnHint'];
+        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string|null', $method->getReturnType()->toString());
         $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
@@ -55,7 +60,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithMixedOrderNullableReturnHint()
     {
-        $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withMixedOrderNullableReturnHint'];
+        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withMixedOrderNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string|null', $method->getReturnType()->toString());
         $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
