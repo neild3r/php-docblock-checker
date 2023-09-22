@@ -8,12 +8,12 @@ use PhpParser\ParserFactory;
 /**
  * @requires PHP 7.0
  */
-class FileParserTest extends \PHPUnit\Framework\TestCase
+class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
 {
     protected $filePath = __DIR__ . '/TestClassPhp7.php';
     protected $fileInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileParser = new FileParser(
             (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
@@ -34,9 +34,9 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
     public function testWithReturnHint()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withReturnHint'];
-        $this->assertTrue($method['has_return']);
-        $this->assertEquals('string', $method['return']);
-        $this->assertEquals('string', $method['docblock']['return']);
+        $this->assertTrue($method->hasReturn());
+        $this->assertEquals('string', $method->getReturnType()->toString());
+        $this->assertEquals('string', $method->getDocBlock()->getReturnType()->toString());
     }
 
     /**
@@ -45,9 +45,9 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
     public function testWithNullableReturnHint()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withNullableReturnHint'];
-        $this->assertTrue($method['has_return']);
-        $this->assertEquals(['null', 'string'], $method['return']);
-        $this->assertEquals(['null', 'string'], $method['docblock']['return']);
+        $this->assertTrue($method->hasReturn());
+        $this->assertEquals('string|null', $method->getReturnType()->toString());
+        $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
     }
 
     /**
@@ -56,8 +56,8 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
     public function testWithMixedOrderNullableReturnHint()
     {
         $method = $this->fileInfo->getMethods()['PhpDocBlockChecker\FileParser\TestClass::withMixedOrderNullableReturnHint'];
-        $this->assertTrue($method['has_return']);
-        $this->assertEquals(['null', 'string'], $method['return']);
-        $this->assertEquals(['null', 'string'], $method['docblock']['return']);
+        $this->assertTrue($method->hasReturn());
+        $this->assertEquals('string|null', $method->getReturnType()->toString());
+        $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
     }
 }

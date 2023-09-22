@@ -77,7 +77,7 @@ abstract class AbstractType extends AbstractCode
      */
     public function __toString()
     {
-        return implode('|', $this->types);
+        return implode('|', $this->types) . ($this->isNullable() ? '|null' : '');
     }
 
     /**
