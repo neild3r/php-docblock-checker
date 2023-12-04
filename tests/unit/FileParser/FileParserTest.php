@@ -4,7 +4,6 @@ namespace PhpDocBlockChecker\Test\Unit\FileParser;
 
 use PhpDocBlockChecker\DocblockParser\DocblockParser;
 use PhpDocBlockChecker\FileParser\FileParser;
-use PhpDocBlockChecker\Test\Fixture\TestClass;
 use PhpParser\ParserFactory;
 use ReflectionClass;
 
@@ -20,8 +19,7 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
             new DocblockParser()
         );
 
-        $this->filePath = (new ReflectionClass(TestClass::class))->getFileName();
-
+        $this->filePath = FIXTURES . 'TestClass.php';
         $this->fileInfo = $fileParser->parseFile($this->filePath);
     }
 
@@ -35,27 +33,27 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
         $classes = $this->fileInfo->getClasses();
         $this->assertCount(1, $classes);
 
-        $class = $classes[TestClass::class];
-        $this->assertEquals(TestClass::class, $class['name']);
+        $class = $classes['Fixtures\TestClass'];
+        $this->assertEquals('Fixtures\TestClass', $class['name']);
         $this->assertEquals(null, $class['docblock']);
     }
 
     public function testWithNoReturn()
     {
-        $method = $this->fileInfo->getMethods()[TestClass::class . '::emptyMethod'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClass::emptyMethod'];
         $this->assertFalse($method->hasReturn());
         $this->assertEquals(null, $method->getReturnType());
     }
 
     public function testWithNoParams()
     {
-        $method = $this->fileInfo->getMethods()[TestClass::class . '::emptyMethod'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClass::emptyMethod'];
         $this->assertEmpty($method->getParams());
     }
 
     public function testWithParams()
     {
-        $method = $this->fileInfo->getMethods()[TestClass::class . '::withParams'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClass::withParams'];
         $types = [];
         foreach ($method->getParams() as $name => $type) {
             $types[$name] = (string) $type;
@@ -66,7 +64,14 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
 
     public function testWithReturn()
     {
-        $method = $this->fileInfo->getMethods()[TestClass::class . '::withReturn'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClass::withReturn'];
+        $this->assertTrue($method->hasReturn());
+        $this->assertEquals(null, $method->getReturnType());
+    }
+
+    public function testNullable()
+    {
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClass::withReturn'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals(null, $method->getReturnType());
     }

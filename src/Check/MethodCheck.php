@@ -24,9 +24,9 @@ class MethodCheck extends Check
 
             if ($method->getDocblock() === null) {
                 if (true === $treatAsError) {
-                    $this->fileStatus->add(new MethodError($file->getFileName(), $name, $method['line'], $name));
+                    $this->fileStatus->add(new MethodError($file->getFileName(), $name, $method->getLine(), $name));
                 } else {
-                    $this->fileStatus->add(new MethodInfo($file->getFileName(), $name, $method['line'], $name));
+                    $this->fileStatus->add(new MethodInfo($file->getFileName(), $name, $method->getLine(), $name));
                 }
             }
         }

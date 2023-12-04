@@ -23,8 +23,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
             new DocblockParser()
         );
 
-        $this->filePath = (new ReflectionClass(TestClassPhp7::class))->getFileName();
-
+        $this->filePath = FIXTURES . 'TestClassPhp7.php';
         $this->fileInfo = $fileParser->parseFile($this->filePath);
     }
 
@@ -38,7 +37,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithReturnHint()
     {
-        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withReturnHint'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClassPhp7::withReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string', $method->getReturnType()->toString());
         $this->assertEquals('string', $method->getDocBlock()->getReturnType()->toString());
@@ -49,7 +48,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithNullableReturnHint()
     {
-        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withNullableReturnHint'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClassPhp7::withNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string|null', $method->getReturnType()->toString());
         $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
@@ -60,7 +59,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
      */
     public function testWithMixedOrderNullableReturnHint()
     {
-        $method = $this->fileInfo->getMethods()[TestClassPhp7::class . '::withMixedOrderNullableReturnHint'];
+        $method = $this->fileInfo->getMethods()['Fixtures\TestClassPhp7::withMixedOrderNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string|null', $method->getReturnType()->toString());
         $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());

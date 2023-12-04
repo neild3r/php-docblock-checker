@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpDocBlockChecker\Test\Fixture;
+namespace Fixtures;
 
 class TestClassPhp7
 {

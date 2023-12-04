@@ -12,4 +12,8 @@
             <directory>tests/unit</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <const name="FIXTURES" value="./tests/fixtures/"/>
+    </php>
 </phpunit>

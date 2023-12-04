@@ -17,7 +17,7 @@ class ParamCheck extends Check
         foreach ($file->getMethods() as $name => $method) {
             $docblock = $method->getDocblock();
             // If the docblock is inherited, we can't check for params and return types:
-            if ($docblock->isInherited()) {
+            if ($docblock && $docblock->isInherited()) {
                 continue;
             }
 
