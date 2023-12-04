@@ -7,3 +7,4 @@ phpdoccheck.phar
 .phpcs-cache
 profiling/report
 composer.lock
+.phpunit.result.cache
