@@ -1,9 +1,10 @@
 <?php
 
-namespace PhpDocBlockChecker\FileProvider;
+namespace PhpDocBlockChecker\Test\Unit\FileProvider;
 
+use PhpDocBlockChecker\FileProvider\DirectoryFileProvider;
 
-class DirectoryFileProviderTest extends \PHPUnit_Framework_TestCase
+class DirectoryFileProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetFileIterator()

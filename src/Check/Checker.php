@@ -21,6 +21,9 @@ class Checker
         ReturnCheck::class
     ];
 
+    /**
+     * @param \PhpDocBlockChecker\Config\Config $config
+     */
     public function __construct(Config $config)
     {
         $this->config = $config;

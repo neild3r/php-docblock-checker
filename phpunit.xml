@@ -6,13 +6,14 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-    <testsuite name="default">
-        <directory suffix="Test.php">tests</directory>
-    </testsuite>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <const name="FIXTURES" value="./tests/fixtures/"/>
+    </php>
 </phpunit>

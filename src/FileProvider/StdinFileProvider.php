@@ -22,6 +22,9 @@ class StdinFileProvider implements FileProviderInterface
         $this->excludes = $excludes;
     }
 
+    /**
+     * Close any open handles
+     */
     public function __destruct()
     {
         // Close the file handle if its still open
@@ -30,6 +33,9 @@ class StdinFileProvider implements FileProviderInterface
         }
     }
 
+    /**
+     * @return bool
+     */
     private function fileHandleOpen()
     {
         $types = ['file' => 'file', 'stream' => 'stream'];

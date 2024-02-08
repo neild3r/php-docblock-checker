@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpDocBlockChecker\FileParser;
+namespace Fixtures;
 
 class TestClass
 {

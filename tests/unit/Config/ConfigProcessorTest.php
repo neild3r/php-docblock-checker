@@ -1,12 +1,15 @@
 <?php
 
-namespace PhpDocBlockChecker\Config;
+namespace PhpDocBlockChecker\Test\Unit\Config;
 
+use PhpDocBlockChecker\Config\Config;
+use PhpDocBlockChecker\Config\ConfigParser;
+use PhpDocBlockChecker\Config\ConfigProcessor;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class ConfigProcessorTest extends \PHPUnit_Framework_TestCase
+class ConfigProcessorTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcessDefaultConfig()
     {

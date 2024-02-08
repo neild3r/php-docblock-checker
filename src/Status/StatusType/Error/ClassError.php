@@ -4,6 +4,9 @@ namespace PhpDocBlockChecker\Status\StatusType\Error;
 
 class ClassError extends Error
 {
+    /**
+     * @return string
+     */
     public function getType()
     {
         return 'class';

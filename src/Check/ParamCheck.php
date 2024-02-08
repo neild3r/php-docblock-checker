@@ -15,43 +15,59 @@ class ParamCheck extends Check
     public function check(FileInfo $file)
     {
         foreach ($file->getMethods() as $name => $method) {
-            // If the docblock is inherited, we can't check for params and return types:
-            if (isset($method['docblock']['inherit']) && $method['docblock']['inherit']) {
+            $docblock = $method->getDocblock();
+            if ($docblock === null) {
                 continue;
             }
 
-            foreach ($method['params'] as $param => $type) {
-                if (!isset($method['docblock']['params'][$param])) {
+            // If the docblock is inherited, we can't check for params and return types:
+            if ($docblock && $docblock->isInherited()) {
+                continue;
+            }
+
+            foreach ($method->getParams() as $param => $paramType) {
+                if ($docblock === null || !$docblock->hasParam($param)) {
                     $this->fileStatus->add(
-                        new ParamMissingWarning($file->getFileName(), $name, $method['line'], $name, $param)
+                        new ParamMissingWarning($file->getFileName(), $name, $method->getLine(), $name, $param)
                     );
                     continue;
                 }
 
-                if (!empty($type)) {
-                    $docBlockTypes = explode('|', $method['docblock']['params'][$param]);
-                    $methodTypes = explode('|', $type);
+                $docBlockType = $docblock->getParam($param);
 
-                    sort($docBlockTypes);
-                    sort($methodTypes);
+                foreach ($paramType->getTypes() as $type) {
+                    if (!$docBlockType->hasType($type)) {
+                        $this->fileStatus->add(
+                            new ParamMismatchWarning(
+                                $file->getFileName(),
+                                $name,
+                                $method->getLine(),
+                                $name,
+                                $param,
+                                $paramType->toString(),
+                                $docBlockType->toString(),
+                            )
+                        );
 
-                    if ($docBlockTypes !== $methodTypes) {
-                        if ($type === 'array' && substr($method['docblock']['params'][$param], -2) === '[]') {
-                            // Do nothing because this is fine.
-                        } else {
-                            $this->fileStatus->add(
-                                new ParamMismatchWarning(
-                                    $file->getFileName(),
-                                    $name,
-                                    $method['line'],
-                                    $name,
-                                    $param,
-                                    $type,
-                                    $method['docblock']['params'][$param]
-                                )
-                            );
-                        }
+                        continue 2;
                     }
+                }
+
+                if (
+                    $paramType->isNullable() !== $docBlockType->isNullable()
+                    || $paramType->isVariadic() !== $docBlockType->isVariadic()
+                ) {
+                    $this->fileStatus->add(
+                        new ParamMismatchWarning(
+                            $file->getFileName(),
+                            $name,
+                            $method->getLine(),
+                            $name,
+                            $param,
+                            $paramType->toString(),
+                            $docBlockType->toString(),
+                        )
+                    );
                 }
             }
         }
