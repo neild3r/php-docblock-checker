@@ -23,6 +23,12 @@ class FileInfo implements \JsonSerializable
      */
     private $mtime;
 
+    /**
+     * @param string $fileName
+     * @param array $classes
+     * @param array $methods
+     * @param int $mtime
+     */
     public function __construct($fileName, $classes, $methods, $mtime)
     {
         $this->fileName = $fileName;
@@ -78,6 +84,12 @@ class FileInfo implements \JsonSerializable
         return $this->mtime;
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

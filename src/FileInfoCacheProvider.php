@@ -29,6 +29,9 @@ class FileInfoCacheProvider
         $this->cacheFile = $cacheFile;
     }
 
+    /**
+     * Write out the file cache
+     */
     public function __destruct()
     {
         // Write to cache file:

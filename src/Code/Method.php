@@ -30,6 +30,9 @@ class Method extends AbstractCode implements \JsonSerializable
     /** @var \PhpDocBlockChecker\Code\Param[] */
     protected $params = [];
 
+    /**
+     * @inheritDoc
+     */
     public static function fromArray(array $data)
     {
         /** @var Method $method */
@@ -177,6 +180,12 @@ class Method extends AbstractCode implements \JsonSerializable
         return isset($this->params[$name]);
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

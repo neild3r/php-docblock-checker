@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpDocBlockChecker\Code;
 
+use PhpDocBlockChecker\Code\SubType;
+
 /**
  * Represents a type and contains comparison functions for dealing with
  * composite types
@@ -18,7 +20,13 @@ abstract class AbstractType extends AbstractCode
     /** @var bool */
     protected $nullable = false;
 
-
+    /**
+     * Create new instance using array data
+     *
+     * @param array $data
+     * @return static
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     public static function fromArray(array $data)
     {
         /** @var AbstractType $method */
@@ -142,6 +150,12 @@ abstract class AbstractType extends AbstractCode
         return false;
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

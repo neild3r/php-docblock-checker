@@ -17,6 +17,9 @@ class Param extends AbstractType
     /** @var bool */
     protected $variadic = false;
 
+    /**
+     * @inheritDoc
+     */
     public static function fromArray(array $data)
     {
         /** @var Param $method */
@@ -75,7 +78,12 @@ class Param extends AbstractType
         return $this->variadic;
     }
 
-
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

@@ -30,6 +30,9 @@ class MethodError extends Error
         return $this->method;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return 'method';

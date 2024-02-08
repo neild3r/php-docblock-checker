@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpDocBlockChecker\Code;
 
+use PhpDocBlockChecker\Code\AbstractCode;
+
 /**
  * Represents a single type not a composite type
  *
@@ -148,6 +150,12 @@ class SubType extends AbstractCode
         return substr($this->type, -2, 2) === '[]';
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

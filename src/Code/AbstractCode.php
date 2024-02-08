@@ -42,6 +42,12 @@ abstract class AbstractCode implements JsonSerializable
         return new static();
     }
 
+    /**
+     * Create a new instance using the array data from the cache
+     *
+     * @param array $input
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     public static function fromArray(array $input)
     {
         $instance = static::factory();
@@ -169,6 +175,12 @@ abstract class AbstractCode implements JsonSerializable
         return $this;
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
