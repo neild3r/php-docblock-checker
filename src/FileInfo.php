@@ -2,6 +2,8 @@
 
 namespace PhpDocBlockChecker;
 
+use PhpDocBlockChecker\Code\Method;
+
 class FileInfo implements \JsonSerializable
 {
     /**
@@ -35,7 +37,13 @@ class FileInfo implements \JsonSerializable
      */
     public static function fromArray(array $data)
     {
-        return new self($data['fileName'], $data['classes'], $data['methods'], $data['mtime']);
+        $methods = [];
+
+        foreach ($data['methods'] as $key => $raw) {
+            $methods[$key] = Method::fromArray($raw);
+        }
+
+        return new self($data['fileName'], $data['classes'], $methods, $data['mtime']);
     }
 
     /**

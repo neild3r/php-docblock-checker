@@ -147,4 +147,10 @@ class SubType extends AbstractCode
     {
         return substr($this->type, -2, 2) === '[]';
     }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->type;
+    }
 }

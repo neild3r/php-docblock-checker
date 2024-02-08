@@ -6,4 +6,3 @@ options:
   - skip-signatures
   - only-signatures
   - fail-on-warnings
-  - info-only

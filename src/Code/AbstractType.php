@@ -18,6 +18,21 @@ abstract class AbstractType extends AbstractCode
     /** @var bool */
     protected $nullable = false;
 
+
+    public static function fromArray(array $data): self
+    {
+        /** @var Param $method */
+        $method = parent::fromArray($data);
+        $method->setNullable($data['nullable']);
+
+        foreach ($data['types'] as $type) {
+            $method->addType($type);
+        }
+
+        return $method;
+    }
+
+
     /**
      * @param bool $bool
      * @return self
@@ -125,5 +140,16 @@ abstract class AbstractType extends AbstractCode
         }
 
         return false;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $base = parent::jsonSerialize();
+
+        return array_merge($base, [
+            'nullable' => $this->nullable,
+            'types' => $this->types,
+        ]);
     }
 }

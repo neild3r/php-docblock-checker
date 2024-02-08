@@ -12,7 +12,7 @@ use PhpDocBlockChecker\Code\MethodDocBlock;
  *
  * @author Neil Brayfield <neil@d3r.com>
  */
-class Method extends AbstractCode
+class Method extends AbstractCode implements \JsonSerializable
 {
 
     /** @var string */
@@ -29,6 +29,27 @@ class Method extends AbstractCode
 
     /** @var \PhpDocBlockChecker\Code\Param[] */
     protected $params = [];
+
+    public static function fromArray(array $data): self
+    {
+        /** @var Method $method */
+        $method = parent::fromArray($data);
+        if ($data['name']) {
+            $method->setName($data['name']);
+        }
+        $method->setHasReturn($data['has_return']);
+        if ($data['return_type']) {
+            $method->setReturnType(ReturnType::fromArray($data['return_type']));
+        }
+        if ($data['doc_block']) {
+            $method->setDocBlock(MethodDocBlock::fromArray($data['doc_block']));
+        }
+        foreach ($data['params'] as $param) {
+            $method->addParam(Param::fromArray($param));
+        }
+
+        return $method;
+    }
 
     /**     *
      * @param bool $bool
@@ -89,7 +110,7 @@ class Method extends AbstractCode
     /**
      * Set the docblock
      *
-     * @param \PhpDocBlockChecker\Code\MethodDocBlock $docblock
+     * @param \PhpDocBlockChecker\Code\MethodDocBlock|null $docblock
      * @return self
      * @author Neil Brayfield <neil@d3r.com>
      */
@@ -154,5 +175,19 @@ class Method extends AbstractCode
     public function hasParam(string $name): bool
     {
         return isset($this->params[$name]);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $base = parent::jsonSerialize();
+
+        return array_merge($base, [
+            'name' => $this->name,
+            'params' => $this->params,
+            'has_return' => $this->hasReturn,
+            'return_type' => $this->returnType,
+            'doc_block' => $this->getDocblock(),
+        ]);
     }
 }

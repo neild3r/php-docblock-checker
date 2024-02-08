@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace PhpDocBlockChecker\Code;
 
+use JsonSerializable;
+
 /**
  * Represents a portion of code belonging to a class
  *
  * @author Neil Brayfield <neil@d3r.com>
  */
-abstract class AbstractCode
+abstract class AbstractCode implements JsonSerializable
 {
     /**
      * @var string|null
@@ -22,7 +24,7 @@ abstract class AbstractCode
     protected $class;
 
     /**
-     * @var string
+     * @var int
      */
     protected $line;
 
@@ -38,6 +40,17 @@ abstract class AbstractCode
     public static function factory(): self
     {
         return new static();
+    }
+
+    public static function fromArray(array $input)
+    {
+        $instance = static::factory();
+        $instance->setClass($input['class']);
+        $instance->setNamespace($input['namespace']);
+        $instance->setLine((int) $input['line']);
+        $instance->setUses($input['uses']);
+
+        return $instance;
     }
 
     /**
@@ -154,5 +167,16 @@ abstract class AbstractCode
         $this->setLine($abstract->getLine());
         $this->setNamespace($abstract->getNamespace());
         return $this;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return [
+            'namespace' => $this->namespace,
+            'class' => $this->class,
+            'line' => $this->line,
+            'uses' => $this->uses,
+        ];
     }
 }

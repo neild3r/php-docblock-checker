@@ -15,7 +15,7 @@ class ReturnCheck extends Check
     {
         foreach ($file->getMethods() as $name => $method) {
             $docblock = $method->getDocblock();
-            if (!$method->hasReturn() || $method->getReturnType() === null) {
+            if ($docblock === null || !$method->hasReturn() || $method->getReturnType() === null) {
                 // Nothing to check.
                 continue;
             }

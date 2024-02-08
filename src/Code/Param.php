@@ -17,6 +17,16 @@ class Param extends AbstractType
     /** @var bool */
     protected $variadic = false;
 
+    public static function fromArray(array $data): self
+    {
+        /** @var Param $method */
+        $method = parent::fromArray($data);
+        $method->setName($data['name']);
+        $method->setVariadic($data['variadic']);
+
+        return $method;
+    }
+
     /**
      * @param string $name
      * @return self
@@ -63,5 +73,17 @@ class Param extends AbstractType
     public function isVariadic(): bool
     {
         return $this->variadic;
+    }
+
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $base = parent::jsonSerialize();
+
+        return array_merge($base, [
+            'name' => $this->name,
+            'variadic' => $this->variadic,
+        ]);
     }
 }

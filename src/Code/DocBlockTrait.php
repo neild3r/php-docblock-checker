@@ -15,6 +15,18 @@ trait DocBlockTrait
     protected $inherited = false;
 
     /**
+     * @param array $input
+     * @author Neil Brayfield <neil@d3r.com>
+     */
+    public static function fromArray(array $input): self
+    {
+        $parent = parent::fromArray($input);
+        $parent->setInherited($input['inherited'] ?? false);
+
+        return $parent;
+    }
+
+    /**
      * @param bool $inherited
      * @return self
      */
@@ -31,5 +43,14 @@ trait DocBlockTrait
     public function isInherited(): bool
     {
         return $this->inherited;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        $parent = parent::jsonSerialize();
+        $parent['inherited'] = $this->inherited;
+
+        return $parent;
     }
 }
