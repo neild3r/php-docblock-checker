@@ -18,5 +18,5 @@ interface DocBlockInterface
      * @param bool $inherited
      * @return self
      */
-    public function setInherited(bool $inherited): self;
+    public function setInherited(bool $inherited);
 }
