@@ -18,7 +18,7 @@ trait DocBlockTrait
      * @param array $input
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public static function fromArray(array $input): self
+    public static function fromArray(array $input)
     {
         $parent = parent::fromArray($input);
         $parent->setInherited($input['inherited'] ?? false);

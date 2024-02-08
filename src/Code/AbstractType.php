@@ -19,9 +19,9 @@ abstract class AbstractType extends AbstractCode
     protected $nullable = false;
 
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data)
     {
-        /** @var Param $method */
+        /** @var AbstractType $method */
         $method = parent::fromArray($data);
         $method->setNullable($data['nullable']);
 

@@ -30,7 +30,7 @@ class Method extends AbstractCode implements \JsonSerializable
     /** @var \PhpDocBlockChecker\Code\Param[] */
     protected $params = [];
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data)
     {
         /** @var Method $method */
         $method = parent::fromArray($data);

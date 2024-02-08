@@ -17,7 +17,7 @@ class Param extends AbstractType
     /** @var bool */
     protected $variadic = false;
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data)
     {
         /** @var Param $method */
         $method = parent::fromArray($data);
