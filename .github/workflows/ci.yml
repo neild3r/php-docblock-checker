@@ -18,6 +18,8 @@ jobs:
       with:
         php-version: ${{ matrix.version }}
         tools: composer:v2
+    - name: Composer install
+      run: composer install
     - name: Run PHP Unit tests
       shell: bash
       run: vendor/bin/phpunit --coverage-text
