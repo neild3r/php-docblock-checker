@@ -7,14 +7,17 @@ jobs:
     name: PHPUnit tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         version: ['7.3', '8.0', '8.2']
 
     steps:
     - uses: actions/checkout@v3
-    - uses: php-actions/composer@v6
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
       with:
-        php_version: ${{ matrix.version }}
+        php-version: ${{ matrix.version }}
+        tools: composer:v2
     - name: Run PHP Unit tests
       shell: bash
       run: vendor/bin/phpunit --coverage-text
