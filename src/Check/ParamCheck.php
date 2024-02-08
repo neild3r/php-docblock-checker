@@ -22,7 +22,7 @@ class ParamCheck extends Check
             }
 
             foreach ($method->getParams() as $param => $paramType) {
-                if (!$docblock->hasParam($param)) {
+                if ($docblock === null || !$docblock->hasParam($param)) {
                     $this->fileStatus->add(
                         new ParamMissingWarning($file->getFileName(), $name, $method->getLine(), $name, $param)
                     );
