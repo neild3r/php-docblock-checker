@@ -186,7 +186,6 @@ class FileParser
                             $param->default instanceof Expr &&
                             property_exists($param->default, 'name') &&
                             property_exists($param->default->name, 'parts') &&
-                            $type !== null &&
                             'null' === $param->default->name->parts[0]
                         ) {
                             $paramType->setNullable(true);
