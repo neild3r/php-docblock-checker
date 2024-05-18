@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpDocBlockChecker\Code;
 
-use PhpDocBlockChecker\Code\SubType;
-
 /**
  * Is similar to a method but represents a docblock
  *

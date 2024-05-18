@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Docblock Checker
  *
@@ -185,7 +186,7 @@ class CheckerCommand extends Command
                     sprintf(
                         '%s %s/%d (%d%%)',
                         str_pad('', $filesPerLine - $processed),
-                        str_pad((string)$processed, strlen((string)$totalFiles), ' ', STR_PAD_LEFT),
+                        str_pad((string) $processed, strlen((string) $totalFiles), ' ', STR_PAD_LEFT),
                         $totalFiles,
                         floor((100 / $totalFiles) * $processed)
                     )

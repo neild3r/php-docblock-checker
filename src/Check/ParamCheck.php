@@ -8,7 +8,6 @@ use PhpDocBlockChecker\Status\StatusType\Warning\ParamMissingWarning;
 
 class ParamCheck extends Check
 {
-
     /**
      * @param FileInfo $file
      */

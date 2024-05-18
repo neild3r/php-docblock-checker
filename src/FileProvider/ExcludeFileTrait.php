@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PhpDocBlockChecker\FileProvider;
 
 trait ExcludeFileTrait

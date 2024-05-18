@@ -48,7 +48,7 @@ class ConfigProcessor
             $config['directory'] .= '/';
         }
 
-        $config['filesPerLine'] = (int)$this->configParser->parseParameter('files-per-line');
+        $config['filesPerLine'] = (int) $this->configParser->parseParameter('files-per-line');
 
         $config['verbose'] = !$config['json'];
 

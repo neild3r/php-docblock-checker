@@ -12,7 +12,6 @@ use PhpDocBlockChecker\DocblockParser\DocblockParser;
 use PhpDocBlockChecker\DocblockParser\ReturnTag;
 use PhpDocBlockChecker\FileInfo;
 use PhpParser\Comment\Doc;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -35,6 +34,7 @@ class FileParser
      * @var DocblockParser
      */
     private $docblockParser;
+
     /**
      * @var Parser
      */
@@ -91,7 +91,7 @@ class FileParser
 
         foreach ($statements as $statement) {
             if ($statement instanceof Namespace_) {
-                return $this->processStatements($file, $statement->stmts, (string)$statement->name);
+                return $this->processStatements($file, $statement->stmts, (string) $statement->name);
             }
 
             if ($statement instanceof Use_) {
@@ -102,7 +102,7 @@ class FileParser
                         $alias = $use->getAlias();
                     }
 
-                    $uses[(string)$alias] = (string)$use->name;
+                    $uses[(string) $alias] = (string) $use->name;
                 }
             }
 
@@ -181,8 +181,8 @@ class FileParser
                             $paramType->addType($type->toString());
                         }
 
-
-                        if (property_exists($param, 'default') &&
+                        if (
+                            property_exists($param, 'default') &&
                             $param->default instanceof Expr &&
                             property_exists($param->default, 'name') &&
                             property_exists($param->default->name, 'parts') &&
