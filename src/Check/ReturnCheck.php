@@ -8,6 +8,8 @@ use PhpDocBlockChecker\Status\StatusType\Warning\ReturnMissingWarning;
 
 class ReturnCheck extends Check
 {
+    use TypeCheckTrait;
+
     /**
      * @param FileInfo $file
      */
@@ -35,21 +37,19 @@ class ReturnCheck extends Check
             $docBlockTypes = $docblock->getReturnType();
             $methodTypes = $method->getReturnType();
 
-            foreach ($methodTypes->getTypes() as $type) {
-                if (!$docBlockTypes->hasType($type)) {
-                    $this->fileStatus->add(
-                        new ReturnMismatchWarning(
-                            $file->getFileName(),
-                            $name,
-                            $method->getLine(),
-                            $name,
-                            $methodTypes->toString(),
-                            $docBlockTypes->toString(),
-                        )
-                    );
+            if (!$this->isTypesValid($docBlockTypes, $methodTypes)) {
+                $this->fileStatus->add(
+                    new ReturnMismatchWarning(
+                        $file->getFileName(),
+                        $name,
+                        $method->getLine(),
+                        $name,
+                        $methodTypes->toString(),
+                        $docBlockTypes->toString(),
+                    )
+                );
 
-                    continue 2;
-                }
+                continue;
             }
 
             if ($methodTypes->isNullable() !== $docBlockTypes->isNullable()) {
