@@ -74,7 +74,7 @@ class SubType extends AbstractCode
      */
     public function getFullyQualified(): string
     {
-        if ($this->isPrimative()) {
+        if ($this->isPrimitive()) {
             return $this->type;
         }
 
@@ -110,7 +110,7 @@ class SubType extends AbstractCode
      * @return bool
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public function isPrimative(): bool
+    public function isPrimitive(): bool
     {
         return in_array($this->type, [
             'bool',

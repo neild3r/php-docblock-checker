@@ -21,6 +21,11 @@ abstract class AbstractType extends AbstractCode
     protected $nullable = false;
 
     /**
+     * @var string|null union or intersection
+     */
+    protected $type;
+
+    /**
      * Create new instance using array data
      *
      * @param array $data
@@ -38,6 +43,24 @@ abstract class AbstractType extends AbstractCode
         }
 
         return $method;
+    }
+
+    /**
+     * @param string|null $string
+     * @return self
+     */
+    public function setType(?string $string): self
+    {
+        $this->type = $string;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     /**
@@ -99,7 +122,15 @@ abstract class AbstractType extends AbstractCode
      */
     public function __toString()
     {
-        return implode('|', $this->types) . ($this->isNullable() ? '|null' : '');
+        $separator = $this->getType() === 'intersection' ? '&' : '|';
+
+        $string = implode($separator, $this->types);
+
+        if ($this->isNullable()) {
+            $string .= $separator . 'null';
+        }
+
+        return $string;
     }
 
     /**
@@ -120,7 +151,8 @@ abstract class AbstractType extends AbstractCode
      */
     public function addTypesFromString(string $type): self
     {
-        $types = explode('|', $type);
+        // Split for Union & Intersection
+        $types = preg_split('/(\||&)/', $type);
 
         foreach ($types as $type) {
             if ($type === 'null') {
@@ -128,6 +160,10 @@ abstract class AbstractType extends AbstractCode
                 continue;
             }
             $this->addType($type);
+        }
+
+        if (count($this->types) > 1) {
+            $this->setType(strpos($type, '&') !== false ? 'intersection' : 'union');
         }
 
         return $this;

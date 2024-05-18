@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeAbstract;
 use PhpParser\Parser;
@@ -150,7 +151,13 @@ class FileParser
                         $returnType
                             ->addType($type->type->toString())
                             ->setNullable(true);
+                    } elseif ($type instanceof IntersectionType) {
+                        $returnType->setType('intersection');
+                        foreach ($type->types as $toAdd) {
+                            $returnType->addType($toAdd->toString());
+                        }
                     } elseif ($type instanceof UnionType) {
+                        $returnType->setType('union');
                         foreach ($type->types as $toAdd) {
                             $returnType->addType($toAdd->toString());
                         }
@@ -173,7 +180,13 @@ class FileParser
                             $paramType
                                 ->addType($type->type->toString())
                                 ->setNullable(true);
+                        } elseif ($type instanceof IntersectionType) {
+                            $paramType->setType('intersection');
+                            foreach ($type->types as $toAdd) {
+                                $paramType->addType($toAdd->toString());
+                            }
                         } elseif ($type instanceof UnionType) {
+                            $paramType->setType('union');
                             foreach ($type->types as $toAdd) {
                                 $paramType->addType($toAdd->toString());
                             }
