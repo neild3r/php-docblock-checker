@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeAbstract;
@@ -106,7 +107,7 @@ class FileParser
                 }
             }
 
-            if ($statement instanceof Class_) {
+            if ($statement instanceof Class_ || $statement instanceof Trait_) {
                 $class = $statement;
                 $fullClassName = $prefix . '\\' . $class->name;
 
