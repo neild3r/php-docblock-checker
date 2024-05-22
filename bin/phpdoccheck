@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
  * PHP Docblock Checker
  *
@@ -9,7 +10,6 @@
  */
 
 use PhpDocBlockChecker\Command\CheckerCommand;
-use PhpDocBlockChecker\InputFactory;
 use Symfony\Component\Console\Application;
 
 $paths = [

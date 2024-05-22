@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 class ConfigParserTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testParseOptionDefaultValue()
     {
         $config = [
@@ -69,7 +68,6 @@ class ConfigParserTest extends \PHPUnit\Framework\TestCase
 
         unlink($tmpfile);
     }
-
 
     public function testParseParameterDefaultValue()
     {

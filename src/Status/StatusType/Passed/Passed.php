@@ -6,7 +6,6 @@ use PhpDocBlockChecker\Status\StatusType\StatusType;
 
 class Passed extends StatusType
 {
-
     /**
      * Passed constructor.
      * @param string $file

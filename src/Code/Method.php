@@ -14,7 +14,6 @@ use PhpDocBlockChecker\Code\MethodDocBlock;
  */
 class Method extends AbstractCode implements \JsonSerializable
 {
-
     /** @var string */
     protected $name;
 

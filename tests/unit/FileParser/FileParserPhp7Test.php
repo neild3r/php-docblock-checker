@@ -4,9 +4,7 @@ namespace PhpDocBlockChecker\Test\Unit\FileParser;
 
 use PhpDocBlockChecker\DocblockParser\DocblockParser;
 use PhpDocBlockChecker\FileParser\FileParser;
-use PhpDocBlockChecker\Test\Fixture\TestClassPhp7;
 use PhpParser\ParserFactory;
-use ReflectionClass;
 
 /**
  * @requires PHP 7.0

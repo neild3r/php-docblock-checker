@@ -6,7 +6,6 @@ use PhpDocBlockChecker\FileProvider\DirectoryFileProvider;
 
 class DirectoryFileProviderTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetFileIterator()
     {
         $provider = new DirectoryFileProvider(__DIR__, []);

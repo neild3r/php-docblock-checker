@@ -40,7 +40,6 @@ abstract class AbstractType extends AbstractCode
         return $method;
     }
 
-
     /**
      * @param bool $bool
      * @return self

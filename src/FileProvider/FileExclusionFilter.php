@@ -7,6 +7,7 @@ use Iterator;
 class FileExclusionFilter extends \FilterIterator
 {
     use ExcludeFileTrait;
+
     /**
      * @var string
      */

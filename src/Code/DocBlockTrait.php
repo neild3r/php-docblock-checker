@@ -45,6 +45,12 @@ trait DocBlockTrait
         return $this->inherited;
     }
 
+    /**
+     * Needed for the cache
+     *
+     * @return mixed
+     * @author Neil Brayfield <neil@d3r.com>
+     */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

@@ -16,9 +16,11 @@ class MethodCheck extends Check
         foreach ($file->getMethods() as $name => $method) {
             $treatAsError = true;
             $params = $method->getParams();
-            if (false === $method->hasReturn() &&
+            if (
+                false === $method->hasReturn() &&
                 $this->config->isOnlySignatures() &&
-                (empty($params) || 0 === count($params))) {
+                (empty($params) || 0 === count($params))
+            ) {
                 $treatAsError = false;
             }
 

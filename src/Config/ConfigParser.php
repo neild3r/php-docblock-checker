@@ -13,10 +13,12 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigParser
 {
     const DEFAULT_CONFIG_FILE = 'phpdoccheck.yml';
+
     /**
      * @var InputInterface
      */
     private $input;
+
     /**
      * @var array
      */
@@ -40,7 +42,7 @@ class ConfigParser
         }
 
         $configFile = $inputConfigFile !== null ?
-            (string)$inputConfigFile :
+            (string) $inputConfigFile :
             getcwd() . '/' . self::DEFAULT_CONFIG_FILE;
 
         $this->fileConfig = $this->parseConfigFile($configFile);
