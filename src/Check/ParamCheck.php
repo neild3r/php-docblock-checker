@@ -8,6 +8,8 @@ use PhpDocBlockChecker\Status\StatusType\Warning\ParamMissingWarning;
 
 class ParamCheck extends Check
 {
+    use TypeCheckTrait;
+
     /**
      * @param FileInfo $file
      */
@@ -34,22 +36,19 @@ class ParamCheck extends Check
 
                 $docBlockType = $docblock->getParam($param);
 
-                foreach ($paramType->getTypes() as $type) {
-                    if (!$docBlockType->hasType($type)) {
-                        $this->fileStatus->add(
-                            new ParamMismatchWarning(
-                                $file->getFileName(),
-                                $name,
-                                $method->getLine(),
-                                $name,
-                                $param,
-                                $paramType->toString(),
-                                $docBlockType->toString(),
-                            )
-                        );
-
-                        continue 2;
-                    }
+                if (!$this->isTypesValid($docBlockType, $paramType)) {
+                    $this->fileStatus->add(
+                        new ParamMismatchWarning(
+                            $file->getFileName(),
+                            $name,
+                            $method->getLine(),
+                            $name,
+                            $param,
+                            $paramType->toString(),
+                            $docBlockType->toString(),
+                        )
+                    );
+                    continue;
                 }
 
                 if (

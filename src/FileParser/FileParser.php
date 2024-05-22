@@ -2,17 +2,21 @@
 
 namespace PhpDocBlockChecker\FileParser;
 
+use PhpDocBlockChecker\Code\AbstractCode;
+use PhpDocBlockChecker\Code\AbstractType;
 use PhpDocBlockChecker\Code\ClassDocBlock;
 use PhpDocBlockChecker\Code\DocBlockInterface;
 use PhpDocBlockChecker\Code\Method;
 use PhpDocBlockChecker\Code\MethodDocBlock;
 use PhpDocBlockChecker\Code\Param as CodeParam;
 use PhpDocBlockChecker\Code\ReturnType;
+use PhpDocBlockChecker\Code\SubType;
 use PhpDocBlockChecker\DocblockParser\DocblockParser;
 use PhpDocBlockChecker\DocblockParser\ReturnTag;
 use PhpDocBlockChecker\FileInfo;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -75,6 +79,46 @@ class FileParser
             $result['methods'],
             filemtime($file)
         );
+    }
+
+    /**
+     * @param \PhpParser\NodeAbstract $parsedType
+     * @param \PhpDocBlockChecker\Code\AbstractType $type
+     * @param \PhpDocBlockChecker\Code\Method $abstractCode
+     * @return void
+     */
+    protected function setupTypes(NodeAbstract $parsedType, AbstractType $type, Method $abstractCode): void
+    {
+        if ($parsedType instanceof UnionType) {
+            $type->setCompositeType('union');
+
+            foreach ($parsedType->types as $toAdd) {
+                if ($toAdd instanceof IntersectionType) {
+                    $subType = new SubType('union', $type);
+                    $subType->setFromAbstract($abstractCode);
+
+                    $type->addType($subType);
+                    $type->setCompositeType('dnf');
+
+                    foreach ($toAdd->types as $toAdd) {
+                        $subType->addType($toAdd->toString());
+                    }
+                } else {
+                    $type->addType($toAdd->toString());
+                }
+            }
+        } elseif ($parsedType instanceof IntersectionType) {
+            $type->setCompositeType('intersection');
+            foreach ($parsedType->types as $toAdd) {
+                $type->addType($toAdd->toString());
+            }
+        } elseif ($parsedType instanceof NullableType) {
+            $type
+                ->addType($parsedType->type->toString())
+                ->setNullable(true);
+        } elseif ($parsedType instanceof NodeAbstract) {
+            $type->addType($parsedType->toString());
+        }
     }
 
     /**
@@ -142,21 +186,11 @@ class FileParser
 
                     $fullMethodName = $fullClassName . '::' . $method->name;
 
-                    $type = $method->returnType;
-
                     $returnType = ReturnType::factory()
                         ->setFromAbstract($methodObject);
 
-                    if ($type instanceof NullableType) {
-                        $returnType
-                            ->addType($type->type->toString())
-                            ->setNullable(true);
-                    } elseif ($type instanceof UnionType) {
-                        foreach ($type->types as $toAdd) {
-                            $returnType->addType($toAdd->toString());
-                        }
-                    } elseif ($type instanceof NodeAbstract) {
-                        $returnType->addType($type->toString());
+                    if ($method->returnType) {
+                        $this->setupTypes($method->returnType, $returnType, $methodObject);
                     } else {
                         $returnType = null;
                     }
@@ -165,21 +199,11 @@ class FileParser
 
                     /** @var Param $param */
                     foreach ($method->params as $param) {
-                        $type = $param->type;
-
                         $paramType = CodeParam::factory()
                             ->setFromAbstract($methodObject);
 
-                        if ($type instanceof NullableType) {
-                            $paramType
-                                ->addType($type->type->toString())
-                                ->setNullable(true);
-                        } elseif ($type instanceof UnionType) {
-                            foreach ($type->types as $toAdd) {
-                                $paramType->addType($toAdd->toString());
-                            }
-                        } elseif ($type instanceof NodeAbstract) {
-                            $paramType->addType($type->toString());
+                        if ($param->type) {
+                            $this->setupTypes($param->type, $paramType, $methodObject);
                         }
 
                         if (
@@ -204,7 +228,6 @@ class FileParser
                         $paramType->setName($name);
 
                         if (property_exists($param, 'variadic') && $param->variadic) {
-                            $name .= ',...';
                             $paramType->setVariadic(true);
                         }
 
@@ -283,7 +306,7 @@ class FileParser
                 foreach ($tagCollection->getParamTags() as $paramTag) {
                     $param = CodeParam::factory()
                         ->setFromAbstract($docBlock)
-                        ->addTypesFromString($paramTag->getType())
+                        ->addTypesFromString($paramTag->getType(), $docBlock)
                         ->setName($paramTag->getVar())
                         ->setVariadic($paramTag->isVariadic());
 
@@ -298,7 +321,7 @@ class FileParser
                 if ($return instanceof ReturnTag) {
                     $returnType = ReturnType::factory()
                         ->setFromAbstract($docBlock)
-                        ->addTypesFromString($return->getType());
+                        ->addTypesFromString($return->getType(), $docBlock);
 
                     $docBlock->setReturnType($returnType);
                 }

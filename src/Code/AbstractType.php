@@ -14,11 +14,15 @@ use PhpDocBlockChecker\Code\SubType;
  */
 abstract class AbstractType extends AbstractCode
 {
-    /** @var array */
-    protected $types = [];
+    use SubTypesTrait;
 
     /** @var bool */
     protected $nullable = false;
+
+    /**
+     * @var string|null union, intersection, dnf or null
+     */
+    protected $compositeType;
 
     /**
      * Create new instance using array data
@@ -31,6 +35,7 @@ abstract class AbstractType extends AbstractCode
     {
         /** @var AbstractType $method */
         $method = parent::fromArray($data);
+        $method->setCompositeType($data['composite_type']);
         $method->setNullable($data['nullable']);
 
         foreach ($data['types'] as $type) {
@@ -38,6 +43,24 @@ abstract class AbstractType extends AbstractCode
         }
 
         return $method;
+    }
+
+    /**
+     * @param string|null $string
+     * @return self
+     */
+    public function setCompositeType(?string $string): self
+    {
+        $this->compositeType = $string;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompositeType(): ?string
+    {
+        return $this->compositeType;
     }
 
     /**
@@ -61,45 +84,26 @@ abstract class AbstractType extends AbstractCode
     }
 
     /**
-     * @param array $types
-     * @return self
-     */
-    public function addTypes(array $types): self
-    {
-        foreach ($types as $type) {
-            $this->addType($type);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $type
-     * @return self
-     * @author Neil Brayfield <neil@d3r.com>
-     */
-    public function addType(string $type): self
-    {
-        $this->types[] = new SubType($type, $this);
-        return $this;
-    }
-
-    /**
-     * @return array
-     * @author Neil Brayfield <neil@d3r.com>
-     */
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    /**
      * @return string
      * @author Neil Brayfield <neil@d3r.com>
      */
     public function __toString()
     {
-        return implode('|', $this->types) . ($this->isNullable() ? '|null' : '');
+        $separator = $this->getCompositeType() === 'intersection' ? '&' : '|';
+
+        $typesStringed = [];
+
+        foreach ($this->types as $type) {
+            $typesStringed[] = $type->toString();
+        }
+
+        $string = implode($separator, $typesStringed);
+
+        if ($this->isNullable()) {
+            $string .= $separator . 'null';
+        }
+
+        return $string;
     }
 
     /**
@@ -115,22 +119,71 @@ abstract class AbstractType extends AbstractCode
      * Set the types using a string that could contain compound types
      *
      * @param string $type
+     * @param AbstractCode $abstractCode
      * @return self
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public function addTypesFromString(string $type): self
+    public function addTypesFromString(string $type, AbstractCode $abstractCode): self
     {
-        $types = explode('|', $type);
+        // Split for DNF
+        $groups = preg_split('/[()]+/', $type, -1, PREG_SPLIT_NO_EMPTY);
 
-        foreach ($types as $type) {
-            if ($type === 'null') {
-                $this->setNullable(true);
-                continue;
+        $isDNF = count($groups) > 1;
+
+        if (!$isDNF) {
+            // Now split for Union & Intersection
+            $typesToAdd = preg_split('/(\||&)/', $type);
+
+            foreach ($typesToAdd as $typeToAdd) {
+                $this->addType($typeToAdd);
             }
-            $this->addType($type);
+
+            if (count($this->types) > 1) {
+                $this->setCompositeType(strpos($type, '&') !== false ? 'intersection' : 'union');
+            }
+
+            return $this;
+        }
+
+        $this->setCompositeType('union');
+
+        foreach ($groups as $groupType) {
+            $groupType = ltrim($groupType, '|');
+            $unionedTypes = explode('|', $groupType);
+
+            foreach ($unionedTypes as $unionedType) {
+                $types = explode('&', $unionedType);
+
+                $addTo = $this;
+                if (count($types) > 1) {
+                    $addTo = new SubType('union', $this);
+                    $addTo->setFromAbstract($abstractCode);
+
+                    $this->addType($addTo);
+                    $this->setCompositeType('dnf');
+                }
+
+                foreach ($types as $typeToAdd) {
+                    $addTo->addType($typeToAdd);
+                }
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllTypedArray(): bool
+    {
+        foreach ($this->types as $type) {
+            if (!$type->isTypedArray()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -138,7 +191,7 @@ abstract class AbstractType extends AbstractCode
      * @return bool
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public function hasType(SubType $type): bool
+    public function matches(SubType $type): bool
     {
         foreach ($this->getTypes() as $thisType) {
             if ($thisType->matches($type)) {
@@ -163,6 +216,7 @@ abstract class AbstractType extends AbstractCode
         return array_merge($base, [
             'nullable' => $this->nullable,
             'types' => $this->types,
+            'composite_type' => $this->compositeType,
         ]);
     }
 }
