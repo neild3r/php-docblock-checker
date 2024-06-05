@@ -33,6 +33,7 @@ class ConfigProcessor
         $config['skipClasses'] = $this->configParser->parseOption('skip-classes');
         $config['skipSignatures'] = $this->configParser->parseOption('skip-signatures');
         $config['onlySignatures'] = $this->configParser->parseOption('only-signatures');
+        $config['skipMethods'] = $this->configParser->parseOption('skip-methods');
         $config['json'] = $this->configParser->parseOption('json');
         $config['failOnWarnings'] = $this->configParser->parseOption('fail-on-warnings');
         $config['infoOnly'] = $this->configParser->parseOption('info-only');
@@ -40,7 +41,6 @@ class ConfigProcessor
 
         // Process parameters
 
-        $config['skipMethods'] = $this->configParser->parseParameter('skip-methods');
         $config['cacheFile'] = $this->configParser->parseParameter('cache-file');
         $config['directory'] = $this->configParser->parseParameter('directory');
         // Check base path ends with a slash:
