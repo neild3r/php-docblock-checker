@@ -200,6 +200,9 @@ class SubType extends AbstractCode
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
-        return $this->type;
+        return [
+            'type' => $this->type,
+            'types' => $this->types,
+        ];
     }
 }
