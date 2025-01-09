@@ -1,5 +1,4 @@
-directory: src
-cache-file: .phpdoccheck
+directory: src/Test/
 options:
   - skip-classes
   - skip-methods
