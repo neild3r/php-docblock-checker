@@ -150,7 +150,7 @@ class FileParser
                     if ($type instanceof NullableType) {
                         $returnType
                             ->addType($type->type->toString())
-                            ->setNullable(true);
+                            ->addType('null');
                     } elseif ($type instanceof UnionType) {
                         foreach ($type->types as $toAdd) {
                             $returnType->addType($toAdd->toString());
@@ -173,7 +173,7 @@ class FileParser
                         if ($type instanceof NullableType) {
                             $paramType
                                 ->addType($type->type->toString())
-                                ->setNullable(true);
+                                ->addType('null');
                         } elseif ($type instanceof UnionType) {
                             foreach ($type->types as $toAdd) {
                                 $paramType->addType($toAdd->toString());
@@ -189,7 +189,7 @@ class FileParser
                             property_exists($param->default->name, 'parts') &&
                             'null' === $param->default->name->parts[0]
                         ) {
-                            $paramType->setNullable(true);
+                            $paramType->addType('null');
                         }
 
                         $name = null;

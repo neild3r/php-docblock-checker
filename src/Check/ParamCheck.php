@@ -52,10 +52,7 @@ class ParamCheck extends Check
                     }
                 }
 
-                if (
-                    $paramType->isNullable() !== $docBlockType->isNullable()
-                    || $paramType->isVariadic() !== $docBlockType->isVariadic()
-                ) {
+                if ($paramType->isVariadic() !== $docBlockType->isVariadic()) {
                     $this->fileStatus->add(
                         new ParamMismatchWarning(
                             $file->getFileName(),

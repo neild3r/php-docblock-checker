@@ -51,19 +51,6 @@ class ReturnCheck extends Check
                     continue 2;
                 }
             }
-
-            if ($methodTypes->isNullable() !== $docBlockTypes->isNullable()) {
-                $this->fileStatus->add(
-                    new ReturnMismatchWarning(
-                        $file->getFileName(),
-                        $name,
-                        $method->getLine(),
-                        $name,
-                        $methodTypes->toString(),
-                        $docBlockTypes->toString(),
-                    )
-                );
-            }
         }
     }
 

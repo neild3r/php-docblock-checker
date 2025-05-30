@@ -17,9 +17,6 @@ abstract class AbstractType extends AbstractCode
     /** @var array */
     protected $types = [];
 
-    /** @var bool */
-    protected $nullable = false;
-
     /**
      * Create new instance using array data
      *
@@ -31,33 +28,12 @@ abstract class AbstractType extends AbstractCode
     {
         /** @var AbstractType $method */
         $method = parent::fromArray($data);
-        $method->setNullable($data['nullable']);
 
         foreach ($data['types'] as $type) {
             $method->addType($type);
         }
 
         return $method;
-    }
-
-    /**
-     * @param bool $bool
-     * @return self
-     */
-    public function setNullable(bool $bool): self
-    {
-        $this->nullable = $bool;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     * @author Neil Brayfield <neil@d3r.com>
-     */
-    public function isNullable(): bool
-    {
-        return $this->nullable;
     }
 
     /**
@@ -99,7 +75,7 @@ abstract class AbstractType extends AbstractCode
      */
     public function __toString()
     {
-        return implode('|', $this->types) . ($this->isNullable() ? '|null' : '');
+        return implode('|', $this->types);
     }
 
     /**
@@ -123,10 +99,6 @@ abstract class AbstractType extends AbstractCode
         $types = explode('|', $type);
 
         foreach ($types as $type) {
-            if ($type === 'null') {
-                $this->setNullable(true);
-                continue;
-            }
             $this->addType($type);
         }
 
@@ -161,7 +133,6 @@ abstract class AbstractType extends AbstractCode
         $base = parent::jsonSerialize();
 
         return array_merge($base, [
-            'nullable' => $this->nullable,
             'types' => $this->types,
         ]);
     }
