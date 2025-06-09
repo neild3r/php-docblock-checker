@@ -160,7 +160,7 @@ class CheckerCommand extends Command
 
         if ($config->isVerbose()) {
             $output->writeln('');
-            $output->writeln('PHP Docblock Checker <fg=blue>by Dan Cryer (https://www.dancryer.com)</>');
+            $output->writeln('PHP Docblock Checker');
             $output->writeln('');
         }
 
