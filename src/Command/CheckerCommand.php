@@ -150,7 +150,7 @@ class CheckerCommand extends Command
         $fileChecker = new FileChecker(
             new FileInfoCacheProvider($config->getCacheFile()),
             new FileParser(
-                (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+                (new ParserFactory())->createForHostVersion(),
                 new DocblockParser()
             ),
             new Checker($config)
