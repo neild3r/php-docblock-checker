@@ -17,7 +17,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $fileParser = new FileParser(
-            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+            (new ParserFactory())->createForHostVersion(),
             new DocblockParser()
         );
 
@@ -60,6 +60,6 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
         $method = $this->fileInfo->getMethods()['Fixtures\TestClassPhp7::withMixedOrderNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
         $this->assertEquals('string|null', $method->getReturnType()->toString());
-        $this->assertEquals('string|null', $method->getDocBlock()->getReturnType()->toString());
+        $this->assertEquals('null|string', $method->getDocBlock()->getReturnType()->toString());
     }
 }
