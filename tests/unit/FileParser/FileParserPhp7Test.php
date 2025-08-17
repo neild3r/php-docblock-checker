@@ -59,7 +59,7 @@ class FileParserPhp7Test extends \PHPUnit\Framework\TestCase
     {
         $method = $this->fileInfo->getMethods()['Fixtures\TestClassPhp7::withMixedOrderNullableReturnHint'];
         $this->assertTrue($method->hasReturn());
-        $this->assertEquals('null|string', $method->getReturnType()->toString());
+        $this->assertEquals('string|null', $method->getReturnType()->toString());
         $this->assertEquals('null|string', $method->getDocBlock()->getReturnType()->toString());
     }
 }
