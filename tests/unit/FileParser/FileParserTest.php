@@ -14,7 +14,7 @@ class FileParserTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $fileParser = new FileParser(
-            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+            (new ParserFactory())->createForHostVersion(),
             new DocblockParser()
         );
 
