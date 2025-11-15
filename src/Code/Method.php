@@ -79,7 +79,7 @@ class Method extends AbstractCode implements \JsonSerializable
      * @return self
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public function setReturnType(ReturnType $returnType = null): self
+    public function setReturnType(?ReturnType $returnType = null): self
     {
         $this->returnType = $returnType;
 
@@ -116,7 +116,7 @@ class Method extends AbstractCode implements \JsonSerializable
      * @return self
      * @author Neil Brayfield <neil@d3r.com>
      */
-    public function setDocBlock(MethodDocBlock $docblock = null): self
+    public function setDocBlock(?MethodDocBlock $docblock = null): self
     {
         $this->docBlock = $docblock;
 
