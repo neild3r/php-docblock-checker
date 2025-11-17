@@ -71,7 +71,7 @@ abstract class AbstractCode implements JsonSerializable
      * @param string|null $namespace
      * @return self
      */
-    public function setNamespace(string $namespace = null): self
+    public function setNamespace(?string $namespace = null): self
     {
         $this->namespace = $namespace;
 
