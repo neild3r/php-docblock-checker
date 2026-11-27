@@ -176,8 +176,15 @@ class FileParser
                                 ->addType($type->type->toString())
                                 ->addType('null');
                         } elseif ($type instanceof UnionType || $type instanceof IntersectionType) {
+                            // Allow one level of nesting
                             foreach ($type->types as $toAdd) {
-                                $paramType->addType($toAdd->toString());
+                                if ($toAdd instanceof UnionType || $toAdd instanceof IntersectionType) {
+                                    foreach ($toAdd->types as $nestedToAdd) {
+                                        $paramType->addType($nestedToAdd->toString());
+                                    }
+                                } else {
+                                    $paramType->addType($toAdd->toString());
+                                }
                             }
                         } elseif ($type instanceof NodeAbstract) {
                             $paramType->addType($type->toString());
